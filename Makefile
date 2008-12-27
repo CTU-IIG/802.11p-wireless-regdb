@@ -1,4 +1,8 @@
-.PHONY: all clean
+# Install prefix
+PREFIX = /usr
+CDRA_PATH = $(PREFIX)/lib/crda
+
+.PHONY: all clean install
 
 all: regulatory.bin key.pub.pem
 
@@ -13,3 +17,7 @@ key.pub.pem: key.priv.pem
 
 key.priv.pem:
 	openssl genrsa -out key.priv.pem 2048
+
+install:
+	install -o 0 -g 0 -m 755 -d $(CDRA_PATH)
+	install -o 0 -g 0 -m 644 regulatory.bin $(CDRA_PATH)/regulatory.bin
