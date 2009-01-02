@@ -141,10 +141,13 @@ country CY:
 	(5250 - 5330 @ 40), (N/A, 20), DFS
 	(5490 - 5710 @ 40), (N/A, 27), DFS
 
+# Data from http://www.ctu.eu/164/download/VOR/VOR-12-08-2005-34.pdf
+# and http://www.ctu.eu/164/download/VOR/VOR-12-05-2007-6-AN.pdf
 country CZ:
-	(2402 - 2482 @ 40), (N/A, 20)
-	(5170 - 5250 @ 40), (N/A, 20)
-	(5250 - 5330 @ 40), (N/A, 20), DFS
+	(2400 - 2483.5 @ 40), (N/A, 100 mW)
+	(5150 - 5250 @ 40), (N/A, 200 mW), NO-OUTDOOR
+	(5250 - 5350 @ 40), (N/A, 200 mW), NO-OUTDOOR, DFS
+	(5470 - 5725 @ 40), (N/A, 1000 mW), DFS
 
 # Data from "Frequenznutzungsplan" (as published in April 2008),
 # downloaded from http://www.bundesnetzagentur.de/media/archive/13358.pdf
