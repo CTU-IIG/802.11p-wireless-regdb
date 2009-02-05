@@ -1,6 +1,6 @@
 # Install prefix
 PREFIX = /usr
-CDRA_PATH = $(PREFIX)/lib/crda
+CRDA_PATH ?= $(PREFIX)/lib/crda
 
 MANDIR ?= $(PREFIX)/share/man/
 
@@ -32,7 +32,7 @@ key.priv.pem:
 # Distributions wishing to just use John's database
 # can just call make install.
 install: regulatory.bin.5.gz
-	install -o 0 -g 0 -m 755 -d $(DESTDIR)/$(CDRA_PATH)
-	install -o 0 -g 0 -m 644 regulatory.bin $(DESTDIR)/$(CDRA_PATH)/regulatory.bin
+	install -o 0 -g 0 -m 755 -d $(DESTDIR)/$(CRDA_PATH)
+	install -o 0 -g 0 -m 644 regulatory.bin $(DESTDIR)/$(CRDA_PATH)/regulatory.bin
 	mkdir -p $(DESTDIR)/$(MANDIR)/man5/
 	install -m 644 -t $(DESTDIR)/$(MANDIR)/man5/ regulatory.bin.5.gz
