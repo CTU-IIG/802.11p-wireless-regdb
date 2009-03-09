@@ -143,9 +143,9 @@ class DBParser(object):
             if end <= 0:
                 self._syntax_error("Invalid end freq (%d)" % end)
             if start > end:
-                self._syntax_error("Inverted freq range it seems (%d - %d)" % (start, end))
-            if end - start <= 0:
-                self._syntax_error("Invalid bandwidth (%d)" % bw)
+                self._syntax_error("Inverted freq range (%d - %d)" % (start, end))
+            if start == end:
+                self._syntax_error("Start and end freqs are equal (%d)" % start)
             if end - start < bw:
                 self._syntax_error("Invalid bandwidth: %d width channel "
 			"cannot possibly fit between %d - %d" % (bw, start, end))
