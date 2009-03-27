@@ -1,38 +1,112 @@
 # Install prefix
-PREFIX = /usr
+PREFIX ?= /usr
 CRDA_PATH ?= $(PREFIX)/lib/crda
+CRDA_KEY_PATH ?= $(CRDA_PATH)/pubkeys
 
 MANDIR ?= $(PREFIX)/share/man/
 
+SHA1SUM ?= /usr/bin/sha1sum
+LSB_RELEASE ?= /usr/bin/lsb_release
+WHOAMI ?= /usr/bin/whoami
 
-.PHONY: all clean install maintainer-clean
+# Distro name: Ubuntu, Debian, Fedora, if not present you get
+# "custom-distro", if your distribution does not have the LSB stuff,
+# then set this variable when calling make if you don't want "custom-distro"
+LSB_ID ?= $(shell if [ -f $(LSB_RELEASE) ]; then \
+			$(LSB_RELEASE) -i -s; \
+		else \
+			echo custom-distro; \
+		fi)
 
-all: regulatory.bin key.pub.pem
+DISTRO_PRIVKEY ?= ~/.wireless-regdb-$(LSB_ID).key.priv.pem
+DISTRO_PUBKEY ?= ~/.wireless-regdb-$(LSB_ID).key.priv.pem
+
+REGDB_AUTHOR ?= $(shell if [ -f $(DISTRO_PRIVKEY) ]; then \
+			echo $(LSB_ID) ; \
+		elif [ -f $(WHOAMI) ]; then \
+			$(WHOAMI); \
+		else \
+			echo custom-user; \
+		fi)
+
+REGDB_PRIVKEY ?= ~/.wireless-regdb-$(REGDB_AUTHOR).key.priv.pem
+REGDB_PUBKEY ?= $(REGDB_AUTHOR).key.pub.pem
+
+REGDB_UPSTREAM_PUBKEY ?= linville.key.pub.pem
+
+REGDB_CHANGED = $(shell $(SHA1SUM) -c --status sha1sum.txt; \
+        if [ $$? -eq 0 ]; then \
+                echo ; \
+        else \
+                echo maintainer-clean $(REGDB_PUBKEY); \
+        fi)
+
+.PHONY: all clean mrproper install maintainer-clean install-distro-key
+
+all: $(REGDB_CHANGED) regulatory.bin
 
 clean:
-	rm -f *.pyc *.gz
+	@rm -f *.pyc *.gz
 
 maintainer-clean: clean
-	rm -f regulatory.bin key.pub.pem
+	@rm -f regulatory.bin
 
-ifneq ($(wildcard key.priv.pem),)
-regulatory.bin: db.txt key.priv.pem
-	./db2bin.py regulatory.bin db.txt key.priv.pem
+mrproper: clean maintainer-clean
+	@echo Removed public key, regulatory.bin and compresed man pages
+	@rm -f $(REGDB_PUBKEY) .custom
 
-key.pub.pem: key.priv.pem
-	openssl rsa -in key.priv.pem -out key.pub.pem -pubout -outform PEM
+regulatory.bin: db.txt $(REGDB_PRIVKEY) $(REGDB_PUBKEY)
+	@echo Generating $@ digitally signed by $(REGDB_AUTHOR)...
+	./db2bin.py regulatory.bin db.txt $(REGDB_PRIVKEY)
+
+$(REGDB_PUBKEY): $(REGDB_PRIVKEY)
+	@echo "Generating public key for $(REGDB_AUTHOR)..."
+	openssl rsa -in $(REGDB_PRIVKEY) -out $(REGDB_PUBKEY) -pubout -outform PEM
+	@echo $(REGDB_PUBKEY) > .custom
+
+
+$(REGDB_PRIVKEY):
+	@echo "Generating private key for $(REGDB_AUTHOR)..."
+	openssl genrsa -out $(REGDB_PRIVKEY) 2048
+
+ifneq ($(shell test -e $(DISTRO_PRIVKEY) && echo yes),yes)
+$(DISTRO_PRIVKEY):
+	@echo "Generating private key for $(LSB_ID) packager..."
+	openssl genrsa -out $(DISTRO_PRIVKEY) 2048
 endif
 
-key.priv.pem:
-	openssl genrsa -out key.priv.pem 2048
+install-distro-key: maintainer-clean $(DISTRO_PRIVKEY)
 
 %.gz: %
 	gzip < $< > $@
 
-# Distributions wishing to just use John's database
-# can just call make install.
+# Users should just do:
+#	sudo make install
+#
+# Developers should do:
+#	make maintainer-clean
+#	make
+#	sudo make install
+#
+# Distributions packagers should do only once:
+#	make install-distro-key
+# This will create a private key for you and install it into
+# ~/.wireless-regdb-$(LSB_ID).key.priv.pem
+# To make new releaes just do:
+#	make maintainer-clean
+#	make
+#	sudo make install
 install: regulatory.bin.5.gz
 	install -m 755 -d $(DESTDIR)/$(CRDA_PATH)
-	install -m 644 regulatory.bin $(DESTDIR)/$(CRDA_PATH)/regulatory.bin
-	mkdir -p $(DESTDIR)/$(MANDIR)/man5/
+	install -m 755 -d $(DESTDIR)/$(CRDA_KEY_PATH)
+	if [ -f .custom ]; then \
+		install -m 644 -t $(DESTDIR)/$(CRDA_KEY_PATH)/ $(shell cat .custom); \
+	fi
+	@# In linville we trust
+	install -m 644 -t $(DESTDIR)/$(CRDA_KEY_PATH)/ $(REGDB_UPSTREAM_PUBKEY)
+	install -m 644 -t $(DESTDIR)/$(CRDA_PATH)/ regulatory.bin
+	install -m 755 -d $(DESTDIR)/$(MANDIR)/man5/
 	install -m 644 -t $(DESTDIR)/$(MANDIR)/man5/ regulatory.bin.5.gz
+
+uninstall:
+	rm -rf $(DESTDIR)/$(CRDA_PATH)/
