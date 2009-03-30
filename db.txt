@@ -162,13 +162,15 @@ country CZ:
 
 # Data from "Frequenznutzungsplan" (as published in April 2008),
 # downloaded from http://www.bundesnetzagentur.de/media/archive/13358.pdf
+# Also applicable is http://www.bundesnetzagentur.de/media/archive/5009.pdf
+# On the 5 GHz ranges TX power can be doubled if TPC is implemented.
 country DE:
 	# entries 279004 and 280006
 	(2400 - 2483.5 @ 40), (N/A, 100 mW)
-	# entries 303005 and 304002
-	(5150 - 5255 @ 40), (N/A, 200 mW), NO-OUTDOOR, DFS
-	# entries 308002 and 309001
-	(5470 - 5650 @ 40), (N/A, 1000 mW), DFS
+	# entries 303005, 304002 and 305002
+	(5150 - 5350 @ 40), (N/A, 100 mW), NO-OUTDOOR, DFS
+	# entries 308002, 309001 and 310003
+	(5470 - 5725 @ 40), (N/A, 500 mW), NO-OUTDOOR, DFS
 
 country DK:
 	(2402 - 2482 @ 40), (N/A, 20)
