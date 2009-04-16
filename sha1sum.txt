@@ -1,1 +1,1 @@
-46a39009a9944b92a0b48b258ea98570b23d0b95  db.txt
+eb35dd05a1d9a212fc76ef56f4da9bcdc59ba64a  regulatory.bin
