@@ -2,7 +2,7 @@
 
 from cStringIO import StringIO
 import struct
-import sha
+import hashlib
 from dbparse import DBParser
 import sys
 
@@ -127,13 +127,13 @@ if len(sys.argv) > 3:
 
     # determine signature length
     key = RSA.load_key(sys.argv[3])
-    hash = sha.new()
+    hash = hashlib.sha1()
     hash.update(output.getvalue())
     sig = key.sign(hash.digest())
     # write it to file
     siglen.set(len(sig))
     # sign again
-    hash = sha.new()
+    hash = hashlib.sha1()
     hash.update(output.getvalue())
     sig = key.sign(hash.digest())
 
