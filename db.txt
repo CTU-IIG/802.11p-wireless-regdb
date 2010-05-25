@@ -170,11 +170,13 @@ country CY:
 
 # Data from http://www.ctu.eu/164/download/VOR/VOR-12-08-2005-34.pdf
 # and http://www.ctu.eu/164/download/VOR/VOR-12-05-2007-6-AN.pdf
+# Power at 5250 - 5350 MHz and 5470 - 5725 MHz can be doubled if TPC is
+# implemented.
 country CZ:
 	(2400 - 2483.5 @ 40), (N/A, 100 mW)
 	(5150 - 5250 @ 40), (N/A, 200 mW), NO-OUTDOOR
-	(5250 - 5350 @ 40), (N/A, 200 mW), NO-OUTDOOR, DFS
-	(5470 - 5725 @ 40), (N/A, 1000 mW), DFS
+	(5250 - 5350 @ 40), (N/A, 100 mW), NO-OUTDOOR, DFS
+	(5470 - 5725 @ 40), (N/A, 500 mW), DFS
 
 # Data from "Frequenznutzungsplan" (as published in April 2008),
 # downloaded from http://www.bundesnetzagentur.de/media/archive/13358.pdf
