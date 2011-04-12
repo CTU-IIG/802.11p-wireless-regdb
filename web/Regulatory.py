@@ -3,7 +3,7 @@
     Regulatory Database
 
     @copyright: 2008 Johannes Berg
-    @license: GNU GPL, see COPYING for details.
+    @license: ISC, see LICENSE for details.
 """
 
 import codecs, math
