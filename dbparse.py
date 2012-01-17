@@ -18,6 +18,12 @@ flag_definitions = {
     'NO-HT40':		1<<10,
 }
 
+dfs_regions = {
+    'DFS-FCC':		1,
+    'DFS-ETSI':		2,
+    'DFS-JP':		3,
+}
+
 class FreqBand(object):
     def __init__(self, start, end, bw, comments=None):
         self.start = start
@@ -61,6 +67,10 @@ class PowerRestriction(object):
         s = self
         return hash((s.max_ant_gain, s.max_eirp))
 
+class DFSRegionError(Exception):
+    def __init__(self, dfs_region):
+        self.dfs_region = dfs_region
+
 class FlagError(Exception):
     def __init__(self, flag):
         self.flag = flag
@@ -90,9 +100,15 @@ class Permission(object):
         return hash(self._as_tuple())
 
 class Country(object):
-    def __init__(self, permissions=None, comments=None):
+    def __init__(self, dfs_region, permissions=None, comments=None):
         self._permissions = permissions or []
         self.comments = comments or []
+	self.dfs_region = 0
+
+	if dfs_region:
+		if not dfs_region in dfs_regions:
+		    raise DFSRegionError(dfs_region)
+		self.dfs_region = dfs_regions[dfs_region]
 
     def add(self, perm):
         assert isinstance(perm, Permission)
@@ -224,11 +240,10 @@ class DBParser(object):
 
     def _parse_country(self, line):
         try:
-            cname, line = line.split(':', 1)
+            cname, cvals= line.split(':', 1)
+            dfs_region = cvals.strip()
             if not cname:
                 self._syntax_error("'country' keyword must be followed by name")
-            if line:
-                self._syntax_error("extra data at end of country line")
         except ValueError:
             self._syntax_error("country name must be followed by colon")
 
@@ -239,7 +254,7 @@ class DBParser(object):
             if len(cname) != 2:
                 self._warn("country '%s' not alpha2" % cname)
             if not cname in self._countries:
-                self._countries[cname] = Country(comments=self._comments)
+                self._countries[cname] = Country(dfs_region, comments=self._comments)
             self._current_countries[cname] = self._countries[cname]
         self._comments = []
 
