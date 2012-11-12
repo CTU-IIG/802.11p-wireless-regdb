@@ -1,8 +1,8 @@
 # This is the world regulatory domain
 country 00:
 	(2402 - 2472 @ 40), (3, 20)
-        # Channel 12 - 13. No HT40 channel fits here
-        (2457 - 2482 @ 20), (3, 20), PASSIVE-SCAN, NO-IBSS
+        # Channel 12 - 13.
+        (2457 - 2482 @ 40), (3, 20), PASSIVE-SCAN, NO-IBSS
         # Channel 14. Only JP enables this and for 802.11b only
         (2474 - 2494 @ 20), (3, 20), PASSIVE-SCAN, NO-IBSS, NO-OFDM
         # Channel 36 - 48
