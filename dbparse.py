@@ -162,9 +162,6 @@ class DBParser(object):
                 self._syntax_error("Inverted freq range (%d - %d)" % (start, end))
             if start == end:
                 self._syntax_error("Start and end freqs are equal (%d)" % start)
-            if end - start < bw:
-                self._syntax_error("Invalid bandwidth: %d width channel "
-			"cannot possibly fit between %d - %d" % (bw, start, end))
         except ValueError:
             self._syntax_error("band must have frequency range")
 
