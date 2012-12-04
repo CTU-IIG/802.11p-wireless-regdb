@@ -651,8 +651,16 @@ country TR: DFS-ETSI
 	(5170 - 5250 @ 20), (N/A, 20)
 	(5250 - 5330 @ 20), (N/A, 20), DFS
 
+# Source:
+# #914 / 06 Sep 2007: http://www.ucrf.gov.ua/uk/doc/nkrz/1196068874
+# #1174 / 23 Oct 2008: http://www.nkrz.gov.ua/uk/activities/ruling/1225269361
+# (appendix 8)
+# Listed 5GHz range is a lowest common denominator for all related
+# rules in the referenced laws. Such a range is used because of
+# disputable definitions there.
 country UA:
-	(2402 - 2482 @ 40), (N/A, 20)
+	(2400 - 2483.5 @ 40), (N/A, 20), NO-OUTDOOR
+	(5150 - 5350 @ 40), (N/A, 20), NO-OUTDOOR
 
 country US: DFS-FCC
 	(2402 - 2472 @ 40), (3, 27)
