@@ -665,6 +665,10 @@ country US: DFS-FCC
 	(5490 - 5600 @ 40), (3, 20), DFS
 	(5650 - 5710 @ 40), (3, 20), DFS
 	(5735 - 5835 @ 40), (3, 30)
+	# 60g band
+	# reference: http://cfr.regstoday.com/47cfr15.aspx#47_CFR_15p255
+	# channels 1,2,3, EIRP=40dBm(43dBm peak)
+	(57240 - 63720 @ 2160), (N/A, 40)
 
 country UY:
 	(2402 - 2482 @ 40), (N/A, 20)
