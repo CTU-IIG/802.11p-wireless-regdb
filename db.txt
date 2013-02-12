@@ -642,9 +642,15 @@ country RO: DFS-ETSI
         # 60 gHz band channels 1-4, ref: Etsi En 302 567
         (57240 - 65880 @ 2160), (N/A, 40), NO-OUTDOOR
 
+
+# Source:
+# http://www.ratel.rs/upload/documents/Plan_namene/Plan_namene-sl_glasnik.pdf
 country RS:
-        # 60 gHz band channels 1-4, ref: Etsi En 302 567
-        (57240 - 65880 @ 2160), (N/A, 40), NO-OUTDOOR
+	(2400 - 2483.5 @ 40), (N/A, 100 mW)
+	(5150 - 5350 @ 40), (N/A, 200 mW), NO-OUTDOOR
+	(5470 - 5725 @ 20), (3, 1000 mW), DFS
+	# 60 gHz band channels 1-4, ref: Etsi En 302 567
+	(57240 - 65880 @ 2160), (N/A, 40), NO-OUTDOOR
 
 country RU:
 	(2402 - 2482 @ 40), (N/A, 20)
