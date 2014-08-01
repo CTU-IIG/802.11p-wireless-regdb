@@ -231,6 +231,8 @@ country DE: DFS-ETSI
 	(5150 - 5350 @ 80), (100 mW), NO-OUTDOOR
 	# entries 308002, 309001 and 310003
 	(5470 - 5725 @ 80), (500 mW), DFS
+	# For ITS-G5 evaluation
+	(5850 - 5925 @ 20), (100 mW), NO-CCK, OCB-ONLY
 	# 60 gHz band channels 1-4, ref: Etsi En 302 567
 	(57240 - 65880 @ 2160), (40), NO-OUTDOOR
 
